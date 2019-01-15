@@ -27,31 +27,23 @@ object LensExamples {
   def primitiveLensProcessStreet(listing: Listing): Listing = 
     GenLens[Listing](_.dealer.address.street.name).modify(_.capitalize)(listing)
 
-  // WTF ???
-  // step back
-  // what is a lens
-  // pair of functions get and set
-  // allow to zoom into a Product (e.g. case class in scala)
-
-  // simple example get and set
-  // get(s: S): A
-  // set(a: A): S => S
+  // Lens constructor
   val idLens = Lens[Listing, String](_.id)(n => a => a.copy(id = n))
-
+  
+  // Usage example
   def getId(listing: Listing): String = idLens.get(listing)
   def setId(listing: Listing, dealerId: String): Listing = idLens.set(dealerId)(listing)
 
   // modify operation
   def addPrefix(listing: Listing) = idLens.modify("p" + _)(listing)
 
-  // Generation
-  // GenLens Macro works for simple types
-
-  // Composition
+  // Generation macro
   val dealer = GenLens[Listing](_.dealer)
   val address = GenLens[Dealer](_.address)
   val street  = GenLens[Address](_.street)
   val streetName = GenLens[Street](_.name)
+  
+  // Lens Composition
   val streetNameLens = dealer composeLens address composeLens street composeLens streetName
 
   def composeLensProcessStreet(listing: Listing): Listing = 
