@@ -11,9 +11,7 @@ object LensExamples {
   case class Dealer(id: String, address: Address)
   case class Listing(id: String, dealer: Dealer)
 
-  val listing = Listing("1", Dealer("1", Address(Street("bothestraße", 3))))
-
-  def naiveProcessStreet(listing: Listing): Listing =
+  def naiveCapitalizeStreet(listing: Listing): Listing =
    listing.copy(
     dealer = listing.dealer.copy(
       address = listing.dealer.address.copy(
@@ -24,11 +22,13 @@ object LensExamples {
     )
   )
 
-  def primitiveLensProcessStreet(listing: Listing): Listing = 
-    GenLens[Listing](_.dealer.address.street.name).modify(_.capitalize)(listing)
+  def lensCapitalizeStreet(listing: Listing): Listing = 
+    GenLens[Listing](_.dealer.address.street.name)
+      .modify(_.capitalize)(listing)
 
   // Lens constructor
-  val idLens = Lens[Listing, String](_.id)(n => a => a.copy(id = n))
+
+  val idLens = Lens[Listing, String](_.id)(newId => listing => listing.copy(id = newId))
   
   // Usage example
   def getId(listing: Listing): String = idLens.get(listing)

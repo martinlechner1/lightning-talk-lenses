@@ -5,14 +5,17 @@ import LensExamples._
 
 class LensExamplesSpec extends FlatSpec with Matchers {
 
-  val streetCapitalizedListing = Listing("1", Dealer("1", Address(Street("Bothestraße", 3)))) 
+  val listing                  = 
+    Listing("1", Dealer("1", Address(Street("bothestraße", 3))))
+  val streetCapitalizedListing = 
+    Listing("1", Dealer("1", Address(Street("Bothestraße", 3)))) 
 
   "Naive process street" should "capitalize the street" in {
-    naiveProcessStreet(listing) shouldEqual streetCapitalizedListing 
+    naiveCapitalizeStreet(listing) shouldEqual streetCapitalizedListing 
   }
 
   "Primitive lens version" should "capitalize the street" in {
-    primitiveLensProcessStreet(listing) shouldEqual streetCapitalizedListing
+    lensCapitalizeStreet(listing) shouldEqual streetCapitalizedListing
   }
 
   "Compose lens version" should "capitalize the street" in {
